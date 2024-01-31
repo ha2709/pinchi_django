@@ -1,37 +1,20 @@
 from django.db import models
 from ecommerce.models.category import Category
+from ecommerce.models.department import Department
+from ecommerce.models.discount import Discount
+from ecommerce.models.product_category import ProductCategory
+import uuid
+
 
 class Product(models.Model):
-    name = models.CharField(max_length=100)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=255)
+    price = models.FloatField()
+    department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name='products')
+    discount = models.ForeignKey(Discount, on_delete=models.SET_NULL, null=True, blank=True, related_name='products')
+    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, related_name='products')
     objects = models.Manager()  # Explicitly define a manager
     
     def __str__(self):
         return self.name
-    
-from django.db import models
-from django.conf import settings
-
- 
-
-class ShoppingCart(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
-    products = models.ManyToManyField(Product, through='ShoppingCartProduct')
-
-class ShoppingCartProduct(models.Model):
-    cart = models.ForeignKey(ShoppingCart, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=1)
-
-class Order(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    products = models.ManyToManyField(Product, through='OrderProduct')
-    created_at = models.DateTimeField(auto_now_add=True)
-    # Add more fields for order details
-
-class OrderProduct(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.IntegerField()
-    # You might want to store price here as well to keep a record of the price at the time of order
+  

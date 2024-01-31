@@ -77,7 +77,13 @@ WSGI_APPLICATION = 'pinchi.wsgi.application'
 
 import dj_database_url
 import os
+ 
+from dotenv import load_dotenv
 
+load_dotenv()
+
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALGORITHM = os.getenv("ALGORITHM", "HS256")
 # Parse database configuration from $DATABASE_URL
 DATABASES = {
     'default': dj_database_url.config(
@@ -129,3 +135,11 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'ecommerce.utils.authentication.JWTAuthentication',   
+         
+    ),
+     
+}
