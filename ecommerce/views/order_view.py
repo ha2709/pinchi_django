@@ -1,4 +1,8 @@
 from rest_framework import viewsets, permissions
+from ..models.order import Order
+from ..serializers.order_serializer import OrderSerializer
+
+
 
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()

@@ -20,7 +20,8 @@ __pycache__/
 /__pycache__/
 # Exclude .pyc files
 *.pyc
-
+ecommerce/models/__pycache__/
+pinchi/__pycache__/
 # Exclude __pycache__ directories
 __pycache__/
 .eggs/
